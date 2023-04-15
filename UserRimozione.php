@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="winter" class="bg-repeat">
+<html lang="en" data-theme="winter">
+<link rel="icon" href='bnb.png' class='bg-repeat' width='400' height='500'>
+
 
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Admin</title>
+  <title>Utente</title>
 </head>
 
 <body>
@@ -20,9 +22,14 @@
     </div>
 
     <div class="flex flex-col w-full justify-center items-center mb-4">
-      <form action='AdminView.php' method='post' class='flex flex-col'>
-        <input type='number' name='id' placeholder='Id da rimuovere' class='input input-bordered rounded-full input-sm mb-2'>
-        <button type='submit' class='btn btn-sm btn-error text-error-content btn-active hover:text-error-content hover:bg-red-400 focus:text-error-content rounded-full w-1/2 self-center'>Rimuovi</button>
+      <form action='UserView.php' method='post' class='flex flex-col'>
+        <input type='number' name='id' placeholder='Id da rimuovere' class='input input-bordered input-sm mb-2'>
+        <div class="flex flex-row justify-between">
+            <button class='btn btn-sm rounded-full btn-ghost w-2/5 self-center'>
+                <a href="UserView.php" class="">Annulla</a>
+            </button>
+        <button type='submit' class='btn btn-sm btn-error text-error-content w-2/5 btn-active hover:text-error-content hover:bg-red-400 focus:text-error-content rounded-full w-1/2 self-center'>Rimuovi</button>
+        </div>
       </form>
     </div>
 
@@ -33,6 +40,8 @@
           Prenotazioni effettuate
         </h1>
         <?php
+        session_start();
+        $id = $_SESSION['codice'];
         $con = mysqli_connect("127.0.0.1", "root", "", "Bed_And_Breakfast");
 
         // Connection check
@@ -41,12 +50,17 @@
           exit();
         }
 
-        $query = "SELECT id, nome, cognome, Descrizione, DataArrivo, DataPartenza, Disdetta FROM prenotazioni
-                    JOIN clienti ON prenotazioni.Cliente = clienti.codice
-                    JOIN camere ON prenotazioni.Camera = camere.Numero";
+        if (mysqli_connect_errno()) {
+          echo "Failed to connect to MySQL: " . mysqli_connect_error();
+          exit();
+        }
+
+        $query = "SELECT id, Descrizione, DataArrivo, DataPartenza, Disdetta FROM prenotazioni
+                  JOIN camere ON prenotazioni.Camera = camere.Numero
+                  WHERE Cliente = '$id'
+                  ORDER BY DataArrivo";
         $result = mysqli_query($con, $query);
 
-        // Query check
         if (!$result = mysqli_query($con, $query)) {
           exit(mysqli_error($con));
         }
@@ -55,11 +69,9 @@
             <thead>
               <tr class='text-center'>
                 <th>ID</th>
-                <th>Cognome</th>
-                <th>Nome</th>
-                <th>Stanza</th>
-                <th>Data Arrivo</th>
-                <th>Data Partenza</th>
+                <th>Camere</th>
+                <th>Data di arrivo</th>
+                <th>Data di partenza</th>
               </tr>
             </thead>
             <tbody>";
@@ -67,8 +79,6 @@
         while ($row = mysqli_fetch_array($result)) {
           echo "<tr>";
           echo "<td>" . $row['id'] . "</td>";
-          echo "<td>" . $row['cognome'] . "</td>";
-          echo "<td>" . $row['nome'] . "</td>";
           echo "<td>" . $row['Descrizione'] . "</td>";
           echo "<td>" . $row['DataArrivo'] . "</td>";
           echo "<td>" . $row['DataPartenza'] . "</td>";

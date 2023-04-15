@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="winter" class="bg-repeat">
+<html lang="en" data-theme="winter">
+<link rel="icon" href='bnb.png' class='bg-repeat' width='400' height='500'>
+
 
 <head>
   <meta charset="UTF-8" />
@@ -59,14 +61,11 @@
         <form action="login.php" method="post">
           <div class="flex flex-col gap-y-2 items-center text-primary-content w-72">
             <label for="username" class="font-bold">Cognome e Nome</label>
-            <input type="text" name="username" id="username" placeholder="James Bond" required class="input bg-base-100 text-base-100 w-72">
+            <input type="text" name="username" id="username" placeholder="Nome Cognome" required class="input bg-base-100 text-base-content w-72">
             <label for="email" class="font-bold">Email</label>
-            <input type="text" name="email" id="email" placeholder="tuamail@mail.com" required class="input bg-base-100 text-base-100 w-72">
+            <input type="text" name="email" id="email" placeholder="tuamail@mail.com" required class="input bg-base-100 text-base-content w-72">
             <div class="flex w-full justify-end">
-              <button type="submit" class="btn btn-secondary btn-outline text-base-100 focus:text-base-100 hover:text-base-100 mt-4 w-1/2 px-4 justify-between">Login <span class="material-symbols-outlined">
-                  person
-                </span>
-              </button>
+              <button type="submit" class="btn btn-secondary btn-outline btn-active mt-4 px-4">Login</button>
             </div>
           </div>
         </form>

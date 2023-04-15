@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="winter" class="bg-repeat">
+<html lang="en" data-theme="winter">
+<link rel="icon" href='bnb.png' class='bg-repeat' width='400' height='500'>
+
 
 <head>
   <meta charset="UTF-8" />
@@ -13,11 +15,23 @@
 
 <body>
   <?php
-    if(isset($_POST["id"])) {
-      $id = $_POST["id"];
+  if (isset($_POST["id"])) {
+    $id = $_POST["id"];
 
-      $con
+    $con = mysqli_connect("127.0.0.1", "root", "", "Bed_And_Breakfast");
+
+    if (mysqli_connect_errno()) {
+      echo "Failed to connect to MySQL: " . mysqli_connect_error();
+      exit();
     }
+
+    $deleteSoggiorni = "DELETE FROM soggiorni WHERE Prenotazione = $id";
+    $deletePrenotazioni = "DELETE FROM prenotazioni WHERE id = $id";
+    $resultSoggiorni = mysqli_query($con, $deleteSoggiorni);
+    $resultPrenotazioni = mysqli_query($con, $deletePrenotazioni);
+
+    mysqli_close($con);
+  }
   ?>
   <div class="flex flex-col h-screen">
     <div class="flex flex-col justify-center mt-4 mb-4">
@@ -26,12 +40,16 @@
       </div>
       <nav>
         <div class="flex m-2 justify-center gap-x-4 ">
-          <a href="rimozione.php">
-            <button class="btn btn-error w-32 justify-between">Elimina
-              <span class="material-symbols-outlined">
-                delete
-              </span>
-            </button>
+          <a href="index.php">
+            <button class="btn btn-secondary">Logout</button>
+          </a>
+
+          <a href="AdminPrenota.php">
+            <button class="btn btn-accent">Prenota</button>
+          </a>
+
+          <a href="AdminRimozione.php">
+            <button class="btn btn-error">Elimina</button>
           </a>
         </div>
       </nav>
@@ -45,7 +63,6 @@
         <?php
         $con = mysqli_connect("127.0.0.1", "root", "", "Bed_And_Breakfast");
 
-        // Connection check
         if (mysqli_connect_errno()) {
           echo "Failed to connect to MySQL: " . mysqli_connect_error();
           exit();
@@ -56,7 +73,6 @@
                     JOIN camere ON prenotazioni.Camera = camere.Numero";
         $result = mysqli_query($con, $query);
 
-        // Query check
         if (!$result = mysqli_query($con, $query)) {
           exit(mysqli_error($con));
         }
